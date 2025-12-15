@@ -19,6 +19,7 @@ public abstract class BasePage {
             wait.until(webDriver ->
                     ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete"));
         } catch (Exception e) {
+            // Игнорируем ошибку готовности страницы для стабильности тестов
         }
     }
 

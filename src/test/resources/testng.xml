@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Stellar Burgers Tests" parallel="tests" thread-count="2" verbose="1">
+<suite name="Stellar Burgers Tests" parallel="tests" thread-count="2" verbose="2">
+
+    <!-- Настройки для Allure -->
+    <listeners>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
+    </listeners>
 
     <!-- Chrome браузер -->
     <test name="Chrome Tests">
@@ -21,5 +26,10 @@
             <class name="com.stellar.burgers.tests.ConstructorTest"/>
         </classes>
     </test>
+
+    <!-- Дополнительная конфигурация для отчетов -->
+    <suite-files>
+        <suite-file path="testng-allure.xml"/>
+    </suite-files>
 
 </suite>

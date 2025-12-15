@@ -9,6 +9,8 @@ public class User {
     private String name;
     private String email;
     private String password;
+    @Builder.Default
+    private String accessToken = "";
 
     public static User createDefaultUser() {
         return User.builder()
@@ -16,5 +18,9 @@ public class User {
                 .email("test@example.com")
                 .password("password123")
                 .build();
+    }
+
+    public void setAccessToken(String token) {
+        this.accessToken = token;
     }
 }

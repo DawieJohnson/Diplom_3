@@ -1,12 +1,12 @@
 package com.stellar.burgers.tests;
 
-import com.stellar.burgers.data.TestData;
+import com.stellar.burgers.api.UserApiClient;
 import com.stellar.burgers.data.User;
 import com.stellar.burgers.pages.*;
 import io.qameta.allure.*;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 @Epic("Регистрация пользователя")
 @Feature("Функционал регистрации")
@@ -21,7 +21,8 @@ public class RegistrationTest extends BaseTest {
         LoginPage loginPage = new LoginPage(getDriver());
         RegistrationPage registrationPage = new RegistrationPage(getDriver());
 
-        User validUser = TestData.getValidUser();
+        // Для UI регистрации создаем пользователя через TestData
+        User userForUiRegistration = com.stellar.burgers.data.TestData.getValidUser();
 
         Allure.step("1. Открыть главную страницу", step -> {
             assertTrue(mainPage.isMainPageLoaded(), "Главная страница не загрузилась");
@@ -46,15 +47,27 @@ public class RegistrationTest extends BaseTest {
 
         Allure.step("6. Заполнить форму регистрации валидными данными", step -> {
             registrationPage.register(
-                    validUser.getName(),
-                    validUser.getEmail(),
-                    validUser.getPassword()
+                    userForUiRegistration.getName(),
+                    userForUiRegistration.getEmail(),
+                    userForUiRegistration.getPassword()
             );
         });
 
         Allure.step("7. Проверить переход на страницу входа после регистрации", step -> {
             assertTrue(loginPage.isLoginPageLoaded(),
                     "После регистрации не произошел переход на страницу входа");
+        });
+
+        // Сохраняем пользователя для очистки через API
+        // Ждем немного перед попыткой логина, чтобы сервер обработал регистрацию
+        Allure.step("8. Сохранить пользователя для последующей очистки", step -> {
+            try {
+                Thread.sleep(2000); // Даем время серверу обработать регистрацию
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            setCurrentUser(userForUiRegistration);
+            System.out.println("✅ Пользователь сохранен для очистки: " + userForUiRegistration.getEmail());
         });
     }
 
@@ -67,7 +80,8 @@ public class RegistrationTest extends BaseTest {
         LoginPage loginPage = new LoginPage(getDriver());
         RegistrationPage registrationPage = new RegistrationPage(getDriver());
 
-        User invalidUser = TestData.getUserWithShortPassword();
+        // Используем данные для теста с некорректным паролем
+        User invalidUser = com.stellar.burgers.data.TestData.getUserWithShortPassword();
 
         Allure.step("1. Открыть главную страницу", step -> {
             assertTrue(mainPage.isMainPageLoaded());
@@ -92,12 +106,15 @@ public class RegistrationTest extends BaseTest {
                     "Ошибка для некорректного пароля не отображается");
 
             String errorText = registrationPage.getPasswordErrorText();
-            assertTrue(!errorText.isEmpty(), "Текст ошибки пустой");
+            assertFalse(errorText.isEmpty(), "Текст ошибки пустой");
 
-            System.out.println("Текст ошибки пароля: " + errorText);
-
-            assertTrue(errorText.length() > 0,
-                    "Текст ошибки должен содержать сообщение о некорректном пароле");
+            // Проверяем, что текст ошибки содержит ключевые слова
+            assertTrue(errorText.toLowerCase().contains("некорректный") ||
+                            errorText.toLowerCase().contains("парол"),
+                    "Текст ошибки не соответствует ожидаемому: '" + errorText + "'");
+            System.out.println("ℹ️ Проверен текст ошибки: " + errorText);
         });
+
+        // Не сохраняем пользователя для очистки, так как регистрация не прошла
     }
 }

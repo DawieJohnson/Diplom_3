@@ -33,6 +33,11 @@ public class LoginPage extends BasePage {
         return isElementVisible(loginHeader);
     }
 
+    // Добавляем геттер для loginHeader
+    public WebElement getLoginHeader() {
+        return loginHeader;
+    }
+
     public void login(String email, String password) {
         waitAndSendKeys(emailInput, email);
         waitAndSendKeys(passwordInput, password);
