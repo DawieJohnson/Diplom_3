@@ -4,6 +4,7 @@ import com.stellar.burgers.api.UserApiClient;
 import com.stellar.burgers.data.User;
 import com.stellar.burgers.pages.*;
 import io.qameta.allure.*;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertTrue;
@@ -12,6 +13,15 @@ import static org.testng.Assert.assertTrue;
 @Feature("Различные способы входа в систему")
 public class LoginTest extends BaseTest {
 
+    private User testUser;
+
+    @BeforeMethod
+    public void prepareTestUser() {
+        // Создаем пользователя через API перед каждым тестом
+        testUser = UserApiClient.createRandomUser();
+        setCurrentUser(testUser);
+    }
+
     @Test
     @Story("Вход через кнопку 'Войти в аккаунт' на главной")
     @Severity(SeverityLevel.CRITICAL)
@@ -19,10 +29,6 @@ public class LoginTest extends BaseTest {
     public void testLoginFromMainPageButton() {
         MainPage mainPage = new MainPage(getDriver());
         LoginPage loginPage = new LoginPage(getDriver());
-
-        // Создаем пользователя через API (как требует задание)
-        User testUser = UserApiClient.createRandomUser();
-        setCurrentUser(testUser);
 
         Allure.step("1. Открыть главную страницу", step -> {
             assertTrue(mainPage.isMainPageLoaded(),
@@ -56,10 +62,6 @@ public class LoginTest extends BaseTest {
         MainPage mainPage = new MainPage(getDriver());
         LoginPage loginPage = new LoginPage(getDriver());
 
-        // Создаем пользователя через API
-        User testUser = UserApiClient.createRandomUser();
-        setCurrentUser(testUser);
-
         Allure.step("1. Открыть главную страницу", step -> {
             assertTrue(mainPage.isMainPageLoaded(),
                     "Главная страница не загрузилась");
@@ -92,10 +94,6 @@ public class LoginTest extends BaseTest {
         MainPage mainPage = new MainPage(getDriver());
         LoginPage loginPage = new LoginPage(getDriver());
         RegistrationPage registrationPage = new RegistrationPage(getDriver());
-
-        // Создаем пользователя через API
-        User testUser = UserApiClient.createRandomUser();
-        setCurrentUser(testUser);
 
         Allure.step("1. Перейти на страницу регистрации через главную", step -> {
             assertTrue(mainPage.isMainPageLoaded());
@@ -132,10 +130,6 @@ public class LoginTest extends BaseTest {
         MainPage mainPage = new MainPage(getDriver());
         LoginPage loginPage = new LoginPage(getDriver());
         ForgotPasswordPage forgotPasswordPage = new ForgotPasswordPage(getDriver());
-
-        // Создаем пользователя через API
-        User testUser = UserApiClient.createRandomUser();
-        setCurrentUser(testUser);
 
         Allure.step("1. Перейти на страницу восстановления пароля через главную", step -> {
             assertTrue(mainPage.isMainPageLoaded());

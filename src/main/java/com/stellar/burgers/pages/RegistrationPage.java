@@ -1,9 +1,13 @@
 package com.stellar.burgers.pages;
 
+import com.stellar.burgers.config.TestConfig;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class RegistrationPage extends BasePage {
 
@@ -57,7 +61,8 @@ public class RegistrationPage extends BasePage {
 
     public String getPasswordErrorText() {
         try {
-            wait.until(ExpectedConditions.visibilityOf(passwordError));
+            new WebDriverWait(driver, Duration.ofSeconds(TestConfig.EXPLICIT_WAIT))
+                    .until(ExpectedConditions.visibilityOf(passwordError));
             String errorText = passwordError.getText();
             System.out.println("🔴 Текст ошибки: '" + errorText + "'");
             return errorText;

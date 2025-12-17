@@ -115,6 +115,7 @@ public class WebDriverFactory {
 
     private static void configureDriver(WebDriver driver) {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(TestConfig.IMPLICIT_WAIT));
+
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestConfig.PAGE_LOAD_TIMEOUT));
         driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(10));
 

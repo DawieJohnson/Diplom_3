@@ -1,6 +1,5 @@
 package com.stellar.burgers.pages;
 
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -8,6 +7,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import com.stellar.burgers.config.TestConfig;
 
 public class ConstructorPage extends BasePage {
 
@@ -68,7 +68,6 @@ public class ConstructorPage extends BasePage {
         return isTabActive(fillingsTab);
     }
 
-    // УПРОЩЕННЫЕ методы проверки неактивности - проверяем только, что таб НЕ активен
     public boolean isBunsTabInactive() {
         return !isTabActive(bunsTab);
     }
@@ -84,7 +83,8 @@ public class ConstructorPage extends BasePage {
     // Вспомогательные приватные методы
     private boolean isTabActive(WebElement tab) {
         try {
-            wait.until(ExpectedConditions.visibilityOf(tab));
+            new WebDriverWait(driver, Duration.ofSeconds(TestConfig.EXPLICIT_WAIT))
+                    .until(ExpectedConditions.visibilityOf(tab));
 
             String classAttribute = tab.getAttribute("class");
             String color = tab.getCssValue("color");

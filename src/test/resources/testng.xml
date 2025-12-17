@@ -14,6 +14,7 @@
             <class name="com.stellar.burgers.tests.LoginTest"/>
             <class name="com.stellar.burgers.tests.RegistrationTest"/>
             <class name="com.stellar.burgers.tests.ConstructorTest"/>
+            <class name="com.stellar.burgers.tests.ConstructorNavigationTest"/>
         </classes>
     </test>
 
@@ -24,6 +25,7 @@
             <class name="com.stellar.burgers.tests.LoginTest"/>
             <class name="com.stellar.burgers.tests.RegistrationTest"/>
             <class name="com.stellar.burgers.tests.ConstructorTest"/>
+            <class name="com.stellar.burgers.tests.ConstructorNavigationTest"/>
         </classes>
     </test>
 
